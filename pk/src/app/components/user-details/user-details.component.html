@@ -1,0 +1,70 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="height:1px">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+          aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor01">
+    <ul class="navbar-nav ml-auto">
+      <li *ngIf="viewDetails" class="nav-item active">
+        <a class="nav-link" (click)="editProfile()">Edit Profile
+        </a>
+      </li>
+      <li *ngIf="viewDetails && isEditModeOn" class="nav-item">
+        <a class="nav-link" r (click)="deleteProfile()"> Delete Profile</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<br/>
+<br/>
+<div class="margin-profil">
+  <h2>{{title}}</h2>
+  <br/>
+  <br/>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="form-group row has-danger">
+      <label for="login" class="col-sm-2 col-form-label">{{translation[0][versionOfTranslation]}}</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="login" formControlName="login" required>
+      </div>
+      <div class="invalid-feedback" *ngIf="userForm.get('login').hasError('required')">
+        Login is required!
+      </div>
+    </div>
+    <div class="form-group row" *ngIf="viewSignUpMode">
+      <label for="haslo" class="col-sm-2 col-form-label">Enter Password:</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="haslo" formControlName="haslo" required>
+      </div>
+    </div>
+    <div class="form-group row" *ngIf="viewSignUpMode">
+      <label for="confirmPassword" class="col-sm-2 col-form-label">Confirm Password:</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="confirmPassword" [formControl]="confirmPassword" required>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="username" class="col-sm-2 col-form-label">{{translation[1][versionOfTranslation]}}</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="username" formControlName="username" required>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="firstname" class="col-sm-2 col-form-label">{{translation[2][versionOfTranslation]}}</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="firstname" formControlName="firstname" required>
+      </div>
+    </div>
+    <div class="form-group row" *ngIf="isAdmin">
+      <label for="permission" class="col-sm-2 col-form-label">{{translation[3][versionOfTranslation]}}</label>
+      <div class="col-sm-10">
+        <select class="form-control" formControlName="permission" id="permission" required>
+          <option value="1">User</option>
+          <option value="2">Admin</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" *ngIf="!viewDetails">{{buttonContent}}</button>
+  </form>
+</div>
+
