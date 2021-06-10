@@ -167,3 +167,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/pk/node_modules/
+/pk/.idea/
