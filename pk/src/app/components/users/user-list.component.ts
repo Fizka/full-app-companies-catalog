@@ -21,9 +21,9 @@ export class UserListComponent implements OnInit {
   };
   columnDefs = [
     {headerName: 'Login', field: 'login', sortable: true, filter: true},
-    {headerName: 'Username', field: 'username', sortable: true, filter: true, resizable: false, width: 350},
+    {headerName: 'Username', field: 'username', sortable: true, filter: true},
     {headerName: 'Firstname', field: 'firstname', sortable: true, filter: true},
-    {headerName: 'Firstname', field: 'firstname', sortable: true, filter: true},
+    {headerName: 'Lastname', field: 'lastname', sortable: true, filter: true},
     {headerName: 'Active', field: 'status', sortable: true, filter: true},
     {headerName: 'Permission', field: 'role', sortable: true, filter: true},
   ];

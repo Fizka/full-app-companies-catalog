@@ -17,7 +17,6 @@ export class LoginComponent implements OnInit {
   });
 
   constructor(private loginService: LoginService,
-              private router: Router,
               public snackBar: MatSnackBar) {
   }
 
@@ -25,8 +24,8 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.loginForm.valid && this.loginService.login(this.loginForm)) {
-      this.router.navigate(['/']);
+    if (this.loginForm.valid) {
+      this.loginService.login(this.loginForm);
     } else {
       this.openSnackbar();
     }

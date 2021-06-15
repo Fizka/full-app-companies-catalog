@@ -85,6 +85,17 @@ public class UsersController {
         }
     }
 
+    @GetMapping(value = "user/login/{login}")
+    public ResponseEntity<AppUser> getUserById(@PathVariable String login) {
+        try {
+            log.info("Request GET user, with params: " + login);
+            return new ResponseEntity<>(userService.getAppUserByLogin(login), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping(value = "/user/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id) {
         try {

@@ -55,7 +55,8 @@ public class WebSecurityConfigurerAdapterImpl extends WebSecurityConfigurerAdapt
         http    .authorizeRequests()
                 .antMatchers("/loginError")
                 .permitAll()
-                .antMatchers("/login", "/loginError", "/rola/**", "/pages")
+                .antMatchers("/login", "/loginError", "/rola/**", "/pages",
+                        "/user/login/**", "user/**")
                 .hasAnyRole("USER", "ADMIN")
                 .antMatchers(
                         "/users", "/user", "user/**",

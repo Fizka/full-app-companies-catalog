@@ -20,6 +20,11 @@ export class AppUserService {
       {headers: this.authBasic.createAuthorizationHeader( null, null)});
   }
 
+  getUserByLogin(login): Observable<any> {
+    return this.http.get(`${this.baseUrl}/user/login/${login}`,
+      {headers: this.authBasic.createAuthorizationHeader( null, null)});
+  }
+
   createCustomer(customer: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/user`, customer,
       {headers: this.authBasic.createAuthorizationHeader( null, null)});

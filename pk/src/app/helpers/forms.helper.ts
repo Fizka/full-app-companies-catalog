@@ -5,7 +5,7 @@ import {UserModel} from '../model/user.model';
 export class FormsHelper {
 
   getModelCatalogPage(dashboardForm: FormGroup): PageCatalogModel {
-    const catalogModel = new PageCatalogModel();
+    const catalogModel = new PageCatalogModel(0, "", "", "", "", new Date());
     catalogModel.id = dashboardForm.get('id').value;
     catalogModel.title = dashboardForm.get('title').value;
     catalogModel.description = dashboardForm.get('description').value;
@@ -43,7 +43,7 @@ export class FormsHelper {
     user.password = userForm.get('password').value;
     user.lastname = userForm.get('lastname').value;
     user.firstname = userForm.get('firstname').value;
-    user.status =  userForm.get('status').value;
+    user.status = userForm.get('status').value;
     return user;
   }
 

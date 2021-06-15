@@ -35,26 +35,37 @@ export class UserDetailsComponent implements OnInit {
 
   ngOnInit() {
     let id: number;
+    console.log(this.viewMode)
     if (this.viewMode === 'details' || this.viewMode === 'edit') {
       id = history.state.uzytkownikId;
+
     } else if (this.viewMode === 'profile') {
-      id = this.loginService.getId();
-      this.versionOfTranslation = 1;
+      let bodyOfUser: UserModel;
+      console.log(this.loginService.getLogin())
+        this.appUserService.getUserByLogin(this.loginService.getLogin())
+        .subscribe(data => {
+          bodyOfUser = data;
+          console.log(data)
+          id = bodyOfUser.id;
+          this.versionOfTranslation = 1;
+        });
     }
     this.userForm = this.helper.generateFormForUser(this.viewDetails);
-
     if (this.viewSignUpMode) {
       this.userForm.setValidators(passwordValidation(this.confirmPassword));
       this.confirmPassword.valueChanges
         .subscribe(() => this.userForm.updateValueAndValidity());
     }
-
+    console.log(id)
     if (id !== undefined) {
       this.editMode = true;
       let bodyOfUser: UserModel;
-      this.appUserService.getCustomer(id)
+      console.log("login: ")
+      console.log(this.loginService.getUser().login)
+      this.appUserService.getUserByLogin(this.loginService.getUser().login)
         .subscribe(data => {
         bodyOfUser = data;
+        console.log(data)
       });
       this.helper.setUserValues(bodyOfUser, this.userForm);
       this.username = this.userForm.get('username').value;
@@ -64,7 +75,8 @@ export class UserDetailsComponent implements OnInit {
   onSubmit(): void {
     if (this.userForm.valid) {
       if (this.editMode) {
-        this.appUserService.updateCustomer(this.helper.getUserModel(this.userForm).id, this.helper.getUserModel(this.userForm))
+        this.appUserService.updateCustomer(this.helper.getUserModel(this.userForm).id,
+          this.helper.getUserModel(this.userForm))
           .subscribe(data => console.log(data));
         this.goToMode();
       } else {
