@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CatalogPageService} from '../../service/catalog-page.service';
+import {AppUserService} from "../../service/app-user.service";
 
 @Component({
-  selector: 'app-uzytkownicy',
+  selector: 'app-users',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
@@ -29,7 +30,7 @@ export class UserListComponent implements OnInit {
   rowData = [];
 
   constructor(private router: Router,
-              private catalogpageService: CatalogPageService) {
+              private userService: AppUserService) {
   }
 
   ngOnInit() {
@@ -42,7 +43,10 @@ export class UserListComponent implements OnInit {
   }
 
   loadData(): void {
-    this.catalogpageService.getCustomersList().subscribe(data => this.rowData = data);
+    this.userService.getCustomersList().subscribe(data => {
+      this.rowData = data
+      console.log(data)
+    });
   }
 
   addUser(): void {

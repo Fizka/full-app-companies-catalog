@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {FavoritePageComponent} from './favorite-page.component';
 import {LoginService} from '../../service/login.service';
 import {CatalogPageService} from '../../service/catalog-page.service';
+import {PageCatalogModel} from "../../model/page-catalog.model";
 
 @Component({
   selector: 'app-dashboard',
@@ -50,7 +51,22 @@ export class DashboardComponent implements OnInit {
   }
 
   loadData(): void {
-    this.catalogPageService.getCustomersList().subscribe(data => this.rowData, error => console.log(error));
+    this.catalogPageService.getCustomersList().subscribe(data => {
+      data.forEach(data => this.rowData = this.mapToCatalogPage(data))
+      console.log(this.rowData)
+      console.log("loading...")
+      console.log(data);
+    }, error => console.log(error));
+  }
+
+  mapToCatalogPage(data: any) {
+    let dat2: PageCatalogModel[] = [];
+    data.forEach(val=>{
+      console.log(val)
+      dat2.push(new PageCatalogModel(val.idCatalogPage, val.title, val.description, val.companyName,  val.status, val.creationDate))
+    })
+    console.log(dat2)
+    return dat2
   }
 
   goToTemplateUser(): void {

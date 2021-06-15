@@ -18,6 +18,7 @@ public class UserDetailsImpl implements UserDetails {
     private List<SimpleGrantedAuthority> authorities;
 
     public UserDetailsImpl(AppUser contextUser) {
+        log.info(contextUser.toString());
         this.login = contextUser.getLogin();
         this.password = contextUser.getPassword();
         this.authorities = Arrays.stream(contextUser.getRole().split(","))

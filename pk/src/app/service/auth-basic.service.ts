@@ -1,18 +1,21 @@
 import {Injectable} from '@angular/core';
 import {LoginService} from './login.service';
 import {UserModel} from '../model/user.model';
-import {HttpHeaders} from '@angular/common/http';
+import {HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthBasicService {
+export class AuthBasicService implements HttpInterceptor {
 
   constructor() {
   }
 
-  createAuthorizationHeader(headers: HttpHeaders, password, login) {
+  createAuthorizationHeader(password, login) {
+    let headers = new HttpHeaders();
     if (!password || !login) {
+      console.log('Lack of auth!')
       const user: UserModel = this.getUser();
       //password = user.password;
       //login = user.login;
@@ -20,15 +23,33 @@ export class AuthBasicService {
       login = 'admin';
     }
     console.log(password + login)
-    headers.append('Authorization', 'Basic ' +
-      btoa(login + ':' + password));
-    headers.append('Content-Type', 'application/json');
-    headers.append('Access-Control-Allow-Origin', '*');
+    let auth = 'Authorization: ' + 'Basic ' + btoa(login + ':' + password);
+    headers = headers.set(`Authorization`, `Basic ` +
+      btoa(login + `:` + password));
+    headers = headers.set(`Content-Type`, `application/json`);
+    console.log(headers.keys());
+    console.log('Authorization: Basic YWRtaW46YWRtaW4=')
+    console.log(auth)
     return headers;
   }
 
   getUser(): UserModel {
     return JSON.parse(localStorage.getItem('user'));
+  }
+
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // add authorization header with basic auth credentials if available
+    const currentUser = this.getUser;
+    console.log(currentUser)
+
+    req = req.clone({
+      setHeaders: {
+        Authorization: `Basic YWRtaW46YWRtaW4=`
+      }
+    });
+
+    console.log(req)
+    return next.handle(req);
   }
 
 }

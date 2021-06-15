@@ -115,6 +115,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   editProfile(): void {
+    console.log("Try edit")
     const username: string = this.userForm.get('username').value;
     const id: string = this.userForm.get('id').value;
     this.router.navigate([`/user/edit/${username}`], {state: {userId: id}});

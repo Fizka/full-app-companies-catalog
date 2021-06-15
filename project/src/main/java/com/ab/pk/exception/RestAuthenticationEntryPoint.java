@@ -19,6 +19,8 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                          AuthenticationException e) throws  IOException {
         Gson gson = new Gson();
+        log.error(httpServletRequest.getAuthType());
+        log.error(String.valueOf(httpServletRequest.getHeaderNames()));
         log.error("Error - Unauthorised user {}", e);
         log.error(e.getMessage());
         gson.toJson(new Response(401, "Unauthorised"), httpServletResponse.getWriter());
