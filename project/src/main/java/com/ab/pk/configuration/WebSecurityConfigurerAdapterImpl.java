@@ -46,13 +46,13 @@ public class WebSecurityConfigurerAdapterImpl extends WebSecurityConfigurerAdapt
     @SuppressWarnings("deprecation")
     @Autowired
     void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsServiceImpl);
+        auth.userDetailsService(userDetailsServiceImpl)
+                .passwordEncoder(NoOpPasswordEncoder.getInstance());;
     }
 
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.cors().disable().csrf().disable()
-                .authorizeRequests()
+        http    .authorizeRequests()
                 .antMatchers("/loginError")
                 .permitAll()
                 .antMatchers("/login", "/loginError", "/rola/**", "/pages")
@@ -68,6 +68,8 @@ public class WebSecurityConfigurerAdapterImpl extends WebSecurityConfigurerAdapt
                 .exceptionHandling()
                 .accessDeniedHandler(restAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
+
+        http.cors().and().csrf().disable();
     }
 
     private LogoutSuccessHandler logoutSuccessHandler() {

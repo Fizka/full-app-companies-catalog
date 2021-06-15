@@ -8,7 +8,7 @@ import {AuthBasicService} from './auth-basic.service';
 })
 export class AppUserService {
 
-  private baseUrl = 'http://localhost:8080/';
+  private baseUrl = 'http://localhost:8080';
   header: HttpHeaders = new HttpHeaders();
 
   constructor(private http: HttpClient,
