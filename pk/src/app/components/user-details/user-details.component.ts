@@ -94,7 +94,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   get isEditModeOn(): boolean {
-    return this.loginService.isEqualToId(this.userForm.get('id').value) ||
+    return this.loginService.isEqualToId(this.userForm.get('login').value) ||
       this.loginService.isAdmin();
   }
 

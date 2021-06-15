@@ -50,14 +50,14 @@ export class LoginService {
     return JSON.parse(localStorage.getItem('user'));
   }
 
-  getLogin(): UserModel {
+  getLogin(): string {
     console.log("user:")
     console.log(localStorage.getItem('login'))
     return JSON.parse(localStorage.getItem('login'));
   }
 
-  getId(): number {
-    return this.getUser() ? this.getUser().id : null;
+  getId(): string {
+    return this.getLogin() ? this.getLogin() : null;
   }
 
   getRole(): string {
@@ -77,7 +77,8 @@ export class LoginService {
     return false;
   }
 
-  isEqualToId(id: number): boolean {
-    return this.getId() === id;
+  //id to teraz login - TODO trzeba dodac unique do bazki na login
+  isEqualToId(login: string): boolean {
+    return this.getId() === login;
   }
 }

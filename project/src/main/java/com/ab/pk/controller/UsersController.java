@@ -1,6 +1,7 @@
 package com.ab.pk.controller;
 
 import com.ab.pk.model.AppUser;
+import com.ab.pk.model.Credentials;
 import com.ab.pk.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class UsersController {
     }
 
     @GetMapping(value = "/users")
-    public ResponseEntity<List<AppUser>> getAllUsers() {
+    public ResponseEntity<List<Credentials>> getAllUsers() {
         try {
             log.info("Request GET users");
             return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
@@ -64,10 +65,10 @@ public class UsersController {
     }
 
     @PostMapping(value = "/user")
-    public ResponseEntity<AppUser> createUser(@RequestBody AppUser appUser) {
+    public ResponseEntity<Credentials> createUser(@RequestBody Credentials appUser) {
         try {
             log.info("Request POST user, with params: " + appUser);
-            return new ResponseEntity<AppUser>(userService.saveUser(appUser), HttpStatus.CREATED);
+            return new ResponseEntity<>(userService.saveUser(appUser), HttpStatus.CREATED);
         } catch (Exception e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -75,7 +76,7 @@ public class UsersController {
     }
 
     @GetMapping(value = "user/{id}")
-    public ResponseEntity<AppUser> getUserById(@PathVariable Long id) {
+    public ResponseEntity<Credentials> getUserById(@PathVariable Long id) {
         try {
             log.info("Request GET user, with params: " + id);
             return new ResponseEntity<>(userService.getAppUserById(id), HttpStatus.OK);
@@ -86,10 +87,10 @@ public class UsersController {
     }
 
     @GetMapping(value = "user/login/{login}")
-    public ResponseEntity<AppUser> getUserById(@PathVariable String login) {
+    public ResponseEntity<Credentials> getUserById(@PathVariable String login) {
         try {
             log.info("Request GET user, with params: " + login);
-            return new ResponseEntity<>(userService.getAppUserByLogin(login), HttpStatus.OK);
+            return new ResponseEntity<>(userService.getCredentialsByLogin(login), HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -109,7 +110,7 @@ public class UsersController {
     }
 
     @PutMapping(value = "user/{id}")
-    public ResponseEntity putUser(@PathVariable Long id, @RequestBody AppUser appUser) {
+    public ResponseEntity putUser(@PathVariable Long id, @RequestBody Credentials appUser) {
         try {
             log.info("Request UPDATE user, with params: " + id);
             return new ResponseEntity(userService.putUser(id, appUser), HttpStatus.OK);

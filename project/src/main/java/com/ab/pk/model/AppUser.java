@@ -48,6 +48,9 @@ public class AppUser implements Serializable {
     @Column(name = "lastname")
     private String lastname;
 
+    @Column(name = "favorite")
+    private String favorite;
+
     @Enumerated(EnumType.ORDINAL)
     private UserStatus status = UserStatus.ACTIVE;
 

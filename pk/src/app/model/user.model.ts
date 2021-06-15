@@ -7,4 +7,5 @@ export class UserModel {
   username: string;
   status: string;
   role: string;
+  favorite: number[];
 }

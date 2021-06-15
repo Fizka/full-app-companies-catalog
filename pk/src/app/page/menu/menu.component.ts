@@ -30,9 +30,4 @@ export class MenuComponent implements OnInit {
     return this.loginService.isAdmin();
   }
 
-  tryToLogin() {
-    this.appUserService.getCustomerByLogin('admin', 'admin').subscribe(
-      data => console.log(data)
-    );
-  }
 }

@@ -5,6 +5,7 @@ import {PageCatalogModel} from '../../model/page-catalog.model';
 import {UserModel} from '../../model/user.model';
 import {LoginService} from '../../service/login.service';
 import {CatalogPageService} from "../../service/catalog-page.service";
+import {AppUserService} from "../../service/app-user.service";
 
 @Component({
   selector: 'app-ulubione-column',
@@ -20,7 +21,8 @@ export class FavoritePageComponent implements AgRendererComponent {
   rowData: UserModel;
 
   constructor(private loginService: LoginService,
-              private catalogPageService: CatalogPageService) {
+              private catalogPageService: CatalogPageService,
+              private userService : AppUserService) {
   }
 
   // tslint:disable-next-line:no-shadowed-variable
@@ -30,7 +32,15 @@ export class FavoritePageComponent implements AgRendererComponent {
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    this.rowData = this.loginService.getUser();
+    //favorite TODO - servise podpiac
+    let login = this.loginService.getLogin();
+    let user;
+    if(!!login)
+    {
+        this.userService.getUserByLogin(login)
+        .subscribe(data => user = data, error => console.log(error))
+    }
+    this.rowData = user;
     if (!this.rowData) {
       this.favorite = true;
     } else {

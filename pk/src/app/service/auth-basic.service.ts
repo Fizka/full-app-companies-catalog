@@ -35,12 +35,12 @@ export class AuthBasicService implements HttpInterceptor {
   }
 
   getUser(): UserModel {
-    return JSON.parse(localStorage.getItem('user'));
+    return JSON.parse(localStorage.getItem('login'));
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add authorization header with basic auth credentials if available
-    const currentUser = this.getUser;
+    const currentUser = this.getUser();
     console.log(currentUser)
     //TODO default here
     req = req.clone({
