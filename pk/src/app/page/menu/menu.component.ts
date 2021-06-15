@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {LoginService} from '../../service/login.service';
+import {AppUserService} from "../../service/app-user.service";
 
 @Component({
   selector: 'app-menu',
@@ -10,7 +11,8 @@ import {LoginService} from '../../service/login.service';
 export class MenuComponent implements OnInit {
 
   constructor(private router: Router,
-              private loginService: LoginService) {
+              private loginService: LoginService,
+              private appUserService: AppUserService) {
   }
 
   ngOnInit() {
@@ -26,5 +28,11 @@ export class MenuComponent implements OnInit {
 
   isAdmin(): boolean {
     return this.loginService.isAdmin();
+  }
+
+  tryToLogin() {
+    this.appUserService.getCustomerByLogin('admin', 'admin').subscribe(
+      data => console.log(data)
+    );
   }
 }

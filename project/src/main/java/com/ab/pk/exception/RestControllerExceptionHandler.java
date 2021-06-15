@@ -39,7 +39,7 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
     @ExceptionHandler(value = {Exception.class})
     @ResponseBody
     public ResponseEntity<Object> handleError(Exception e, HttpServletRequest request) {
-        log.error("Error - something went wrong!");
+        log.error("Error - something went wrong!" + e.getMessage() + e.getCause());
         return new ResponseEntity<>(new Response(400, "Something went wrong..."), new HttpHeaders(),
                 HttpStatus.BAD_REQUEST);
     }

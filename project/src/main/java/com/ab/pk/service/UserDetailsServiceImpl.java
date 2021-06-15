@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Optional<AppUser> user = Optional.of(userService.findAppUserByLogin(login));
 
         user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + login));
-
+        log.info("New User logged: " + user.get());
         return user.map(UserDetailsImpl::new).get();
     }
 }

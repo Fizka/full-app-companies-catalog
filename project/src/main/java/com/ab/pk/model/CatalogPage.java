@@ -37,6 +37,9 @@ public class CatalogPage implements Serializable {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "companyName")
+    private String companyName;
+
     @ManyToOne(
             fetch = FetchType.LAZY,
             optional = false
@@ -53,5 +56,10 @@ public class CatalogPage implements Serializable {
     @Column(name = "description")
     private String description;
 
-
+    public CatalogPage(String title, String companyName, AppUser owner, String description) {
+        this.title = title;
+        this.companyName = companyName;
+        this.owner = owner;
+        this.description = description;
+    }
 }

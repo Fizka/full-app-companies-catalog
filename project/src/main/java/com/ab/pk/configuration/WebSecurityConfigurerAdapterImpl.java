@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -52,12 +51,16 @@ public class WebSecurityConfigurerAdapterImpl extends WebSecurityConfigurerAdapt
 
     protected void configure(HttpSecurity http) throws Exception {
 
-        http
+        http.cors().disable().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/loginError").hasAnyRole("USER", "ADMIN")
-                .antMatchers( "/dashboard/rola/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.GET,"/login").permitAll()
-                .antMatchers("/dashboard/**", "/dashboard").access("hasRole('ADMIN')")
+                .antMatchers("/loginError")
+                .permitAll()
+                .antMatchers("/login", "/loginError", "/rola/**", "/pages")
+                .hasAnyRole("USER", "ADMIN")
+                .antMatchers(
+                        "/users", "/user", "user/**",
+                        "/page/**", "/page")
+                .hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -65,8 +68,6 @@ public class WebSecurityConfigurerAdapterImpl extends WebSecurityConfigurerAdapt
                 .exceptionHandling()
                 .accessDeniedHandler(restAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
-
-        http.cors().and().csrf().disable();
     }
 
     private LogoutSuccessHandler logoutSuccessHandler() {

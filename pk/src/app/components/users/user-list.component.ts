@@ -45,7 +45,7 @@ export class UserListComponent implements OnInit {
     this.catalogpageService.getCustomersList().subscribe(data => this.rowData = data);
   }
 
-  dodaj(): void {
+  addUser(): void {
     this.router.navigateByUrl('user/add');
   }
 

@@ -91,9 +91,9 @@ export class UserDetailsComponent implements OnInit {
   }
 
   get title(): string {
-    if (this.viewMode === 'add') {
+    if (this.viewMode === 'signUp') {
       return `SIGN UP USER`;
-    } else if (this.viewMode === 'signUp') {
+    } else if (this.viewMode === 'add') {
       return `ADD USER`;
     } else if (this.viewMode === 'edit') {
       return `EDIT USER  ${this.username}`;

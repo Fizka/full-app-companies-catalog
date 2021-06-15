@@ -25,12 +25,12 @@ export class LoginService {
     localStorage.removeItem('user');
   }
 
-  getUsers(): UserModel {
+  getUser(): UserModel {
     return JSON.parse(localStorage.getItem('user'));
   }
 
   getId(): number {
-    return this.getUsers() ? this.getUsers().id : null;
+    return this.getUser() ? this.getUser().id : null;
   }
 
   getRole(): string {

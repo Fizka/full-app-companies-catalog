@@ -30,7 +30,7 @@ export class FavoritePageComponent implements AgRendererComponent {
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    this.rowData = this.loginService.getUsers();
+    this.rowData = this.loginService.getUser();
     if (!this.rowData) {
       this.favorite = true;
     } else {

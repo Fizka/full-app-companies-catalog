@@ -20,7 +20,7 @@ public class UserDetailsImpl implements UserDetails {
     public UserDetailsImpl(AppUser contextUser) {
         this.login = contextUser.getLogin();
         this.password = contextUser.getPassword();
-        this.authorities = Arrays.stream(getCollectRole(contextUser.getRole()).split(","))
+        this.authorities = Arrays.stream(contextUser.getRole().split(","))
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());
         log.info(String.valueOf(this.authorities));

@@ -50,4 +50,14 @@ public class AppUser implements Serializable {
 
     @Enumerated(EnumType.ORDINAL)
     private UserStatus status = UserStatus.ACTIVE;
+
+    public AppUser(String login, String password, String role, String username, String firstname, String lastname, UserStatus status) {
+        this.login = login;
+        this.password = password;
+        this.role = role;
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.status = status;
+    }
 }

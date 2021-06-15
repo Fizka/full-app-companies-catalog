@@ -21,6 +21,7 @@ const routes: Routes = [
   {path: 'user/edit/:username', component: UserDetailsComponent, canActivate: [UserGuard], data: {typWidoku: 'edit'}},
   {path: 'user/profile', component: UserDetailsComponent, canActivate: [UserGuard], data: {typWidoku: 'profile'}},
   {path: 'user/profile/:username', component: UserDetailsComponent, canActivate: [UserGuard], data: {typWidoku: 'details'}},
+  {path: 'user/add', component: UserDetailsComponent, data: {typWidoku: 'add'}},
   {path: 'signUp', component: UserDetailsComponent, canActivate: [LogoutGuard], data: {typWidoku: 'add'}},
   {path: 'login', component: LoginComponent, canActivate: [LogoutGuard]}
 ];

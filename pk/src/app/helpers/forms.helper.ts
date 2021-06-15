@@ -61,10 +61,10 @@ export class FormsHelper {
     return new FormGroup({
       id: new FormControl({value: '', disabled: widokDetali}),
       login: new FormControl({value: '', disabled: widokDetali}, Validators.required),
-      haslo: new FormControl({value: '', disabled: widokDetali}, Validators.required),
+      password: new FormControl({value: '', disabled: widokDetali}, Validators.required),
       username: new FormControl({value: '', disabled: widokDetali}, Validators.required),
-      imie: new FormControl({value: '', disabled: widokDetali}, Validators.required),
-      uprawnienia: new FormControl({value: 1, disabled: widokDetali}),
+      firstname: new FormControl({value: '', disabled: widokDetali}, Validators.required),
+      permission: new FormControl({value: 1, disabled: widokDetali}),
     });
   }
 
