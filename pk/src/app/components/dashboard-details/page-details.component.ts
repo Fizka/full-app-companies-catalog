@@ -7,6 +7,7 @@ import {MatSnackBar} from '@angular/material';
 import {LoginService} from '../../service/login.service';
 import {CatalogPageService} from '../../service/catalog-page.service';
 import {PageCatalogModel} from '../../model/page-catalog.model';
+import {AppUserService} from '../../service/app-user.service';
 
 @Component({
   selector: 'app-page-details',
@@ -19,12 +20,14 @@ export class PageDetailsComponent implements OnInit {
   helper = new FormsHelper();
   editMode = false;
   viewMode: string;
+  owner: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               public snackBar: MatSnackBar,
               private loginService: LoginService,
-              private catalogPageService: CatalogPageService) {
+              private catalogPageService: CatalogPageService,
+              private appUserService: AppUserService) {
     this.route.data.subscribe(data => {
       this.viewMode = data.typWidoku;
     });
@@ -36,10 +39,15 @@ export class PageDetailsComponent implements OnInit {
     if (id) {
       this.editMode = true;
       let bodyOfCatalogPage: PageCatalogModel;
-      this.catalogPageService.getCustomer(id).subscribe(data => {
+      this.catalogPageService.getPage(id).subscribe(data => {
         bodyOfCatalogPage = data;
+        this.helper.setCatalogPageValues(bodyOfCatalogPage, this.catalogPageForm);
       });
-      this.helper.setCatalogPageValues(bodyOfCatalogPage, this.catalogPageForm);
+    } else {
+      this.appUserService.getCustomer(this.loginService.getId()).subscribe(data => {
+        console.log(data);
+        this.owner = data.firstname + ' ' + data.lastname;
+      });
     }
   }
 
@@ -47,26 +55,34 @@ export class PageDetailsComponent implements OnInit {
     if (this.catalogPageForm.valid) {
       if (this.editMode) {
         this.catalogPageService
-          .updateCustomer(this.helper.getModelCatalogPage(this.catalogPageForm).id,
-            this.helper.getModelCatalogPage(this.catalogPageForm));
+          .updatePage(this.helper.getModelCatalogPage(this.catalogPageForm).idCatalogPage,
+            this.helper.getModelCatalogPage(this.catalogPageForm)).subscribe(data => {
+            this.navigate(data.idCatalogPage);
+        });
       } else {
-        this.catalogPageService.createCustomer(this.helper.getModelCatalogPage(this.catalogPageForm))
-          .subscribe(data => console.log(data));
+        this.catalogPageService.createPage(this.helper.getModelNewCatalog(this.catalogPageForm, this.loginService.getId()))
+          .subscribe(data => {
+            console.log(data);
+            this.navigate(data.idCatalogPage);
+          });
       }
-      const id = this.catalogPageForm.get('id').value;
-      this.router.navigate([`/page/${id}`]);
     } else {
       this.openSnackbar();
     }
   }
 
+  private navigate(pageId: number) {
+    this.router.navigate([`/page/${pageId}`]);
+  }
+
   edit(): void {
-    const id: string = this.catalogPageForm.get('id').value;
+    const id: string = this.catalogPageForm.get('idCatalogPage').value;
+    console.log(this.catalogPageForm);
     this.router.navigate([`/page/edit/${id}`]);
   }
 
   delete(): void {
-    this.catalogPageService.deleteCustomer(this.catalogPageForm.get('id').value)
+    this.catalogPageService.deletePage(this.catalogPageForm.get('idCatalogPage').value)
       .subscribe(data => console.log(data));
     this.router.navigate([`/`]);
   }
@@ -100,5 +116,13 @@ export class PageDetailsComponent implements OnInit {
     this.snackBar.open(message, 'Close', {
       duration: 10000
     });
+  }
+
+  get pageOwner() {
+    if (!!this.catalogPageForm.get('owner').value) {
+      return this.catalogPageForm.get('owner').value.firstname + ' ' + this.catalogPageForm.get('owner').value.lastname;
+    } else {
+      return this.owner;
+    }
   }
 }

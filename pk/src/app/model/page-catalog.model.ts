@@ -1,18 +1,18 @@
-import {UserModel} from "./user.model";
 
 export class PageCatalogModel {
-  id: number;
+  idCatalogPage: number;
   title: string;
   description: string;
+  companyName: string;
   owner: string;
   status: string;
   creationDate: Date;
 
-
-  constructor(id: number, title: string, description: string, owner: string, status: string, creationDate: Date) {
-    this.id = id;
+  constructor(id: number, title: string, description: string, companyName: string, owner: string, status: string, creationDate: Date) {
+    this.idCatalogPage = id;
     this.title = title;
     this.description = description;
+    this.companyName = companyName;
     this.owner = owner;
     this.status = status;
     this.creationDate = creationDate;

@@ -4,8 +4,9 @@ import {ICellRendererParams} from 'ag-grid-community';
 import {PageCatalogModel} from '../../model/page-catalog.model';
 import {UserModel} from '../../model/user.model';
 import {LoginService} from '../../service/login.service';
-import {CatalogPageService} from "../../service/catalog-page.service";
-import {AppUserService} from "../../service/app-user.service";
+import {CatalogPageService} from '../../service/catalog-page.service';
+import {AppUserService} from '../../service/app-user.service';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-ulubione-column',
@@ -22,25 +23,32 @@ export class FavoritePageComponent implements AgRendererComponent {
 
   constructor(private loginService: LoginService,
               private catalogPageService: CatalogPageService,
-              private userService : AppUserService) {
+              private userService: AppUserService) {
   }
 
-  // tslint:disable-next-line:no-shadowed-variable
   isEmpty(value): boolean {
     return !value;
   }
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    //favorite TODO - servise podpiac
-    let login = this.loginService.getLogin();
+    const userId = this.loginService.getId();
     let user;
-    if(!!login)
-    {
-        this.userService.getUserByLogin(login)
-        .subscribe(data => user = data, error => console.log(error))
+    if (!!userId) {
+        this.userService.getCustomer(userId).pipe(map(data => {
+          if (!data.favorite) {
+            data.favourite = [];
+          }
+          return data;
+        })).subscribe(data => {
+          user = data;
+          this.rowData = user;
+          this.setFavourite(params);
+        }, error => console.log(error));
     }
-    this.rowData = user;
+  }
+
+  setFavourite(params: ICellRendererParams): void {
     if (!this.rowData) {
       this.favorite = true;
     } else {
@@ -52,18 +60,28 @@ export class FavoritePageComponent implements AgRendererComponent {
     return false;
   }
 
-  //Mamy favorite?
   addToFavorite(data: PageCatalogModel) {
+    console.log(this.rowData);
     if (this.rowData) {
       this.favorite = !this.favorite;
-      //const index = this.rowData.czasopisma.findIndex(row => row === data.id);
-      //this.favorite === false ? this.rowData.czasopisma.push(data.id) : this.rowData.czasopisma.splice(index, 1);
-      //this.catalogPageService.updateCustomer(this.rowData)
+      const index = this.rowData.favorite.findIndex(row => row === data.idCatalogPage);
+      console.log(this.favorite);
+      this.favorite === false ? this.rowData.favorite.push(data.idCatalogPage) : this.rowData.favorite.splice(index, 1);
+      this.userService.updateFavouritesCustomer(data.idCatalogPage).subscribe();
     }
+    this.preventRowSelection();
+  }
+
+  preventRowSelection(): void {
+    const previousValue = this.params.node.gridOptionsWrapper.gridOptions.suppressRowClickSelection;
+    this.params.node.gridOptionsWrapper.gridOptions.suppressRowClickSelection = true;
+    setTimeout(() => {
+      this.params.node.gridOptionsWrapper.gridOptions.suppressRowClickSelection = previousValue;
+    });
   }
 
   getFavoriteForUser(data: PageCatalogModel) {
-    //return this.rowData.czasopisma.find(row => row === data.id);
+    return this.rowData.favorite.find(row => row === data.idCatalogPage);
   }
 
 }

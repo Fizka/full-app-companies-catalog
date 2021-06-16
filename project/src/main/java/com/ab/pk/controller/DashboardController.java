@@ -1,8 +1,11 @@
 package com.ab.pk.controller;
 
+import com.ab.pk.model.AppUser;
 import com.ab.pk.model.CatalogPage;
+import com.ab.pk.model.ContextPage;
 import com.ab.pk.model.Response;
 import com.ab.pk.service.DashboardService;
+import com.ab.pk.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,10 +30,12 @@ import java.util.Optional;
 public class DashboardController {
 
     private final DashboardService dashboardService;
+    private final UserService userService;;
 
     @Autowired
-    public DashboardController(DashboardService dashboardService) {
+    public DashboardController(DashboardService dashboardService, UserService userService) {
         this.dashboardService = dashboardService;
+        this.userService = userService;
     }
 
     @GetMapping(value = "/page/{id}", produces = "application/json")
@@ -61,14 +66,15 @@ public class DashboardController {
     }
 
     @PostMapping(value = "/page", produces = "application/json")
-    public ResponseEntity<Object> postCatalogPage(@RequestBody CatalogPage catalogPage) {
+    public ResponseEntity<Object> postCatalogPage(@RequestBody ContextPage catalogPage) {
 
         try {
             log.info(catalogPage.toString());
             if (catalogPage.getTitle() == null) {
                 throw new NullPointerException();
             }
-            CatalogPage catalogPage_ = dashboardService.savePage(catalogPage);
+            AppUser appUser = userService.mapCredentialsToAppUser(userService.getAppUserById(catalogPage.getIdAppUser()));
+            CatalogPage catalogPage_ = dashboardService.savePage(catalogPage, appUser);
             return new ResponseEntity<>(catalogPage_, HttpStatus.CREATED);
         } catch (Exception exception) {
             log.error(exception.getMessage());

@@ -16,20 +16,16 @@ export class LoginService {
               public snackBar: MatSnackBar) {
   }
 
-  login(dane: FormGroup) {
-    let login = dane.get('login').value;
-    let password = dane.get('password').value;
-    console.log("loading login...")
-    console.log(login)
-    login = "admin"
-    login = "admin"
-   this.appUserService.getCustomerByLogin(login, password).subscribe(
-     data=>{
-       console.log(login)
-       localStorage.setItem('login', JSON.stringify(login));
+  login(data: FormGroup) {
+    const login = data.get('login').value;
+    const password = data.get('password').value;
+    this.appUserService.getCustomerByLogin(login, password).subscribe(
+     userData => {
+       localStorage.setItem('userId', JSON.stringify(userData.idAppUser));
+       localStorage.setItem('role', JSON.stringify(userData.role));
+       localStorage.setItem('authorization', `Basic ` + btoa(login + `:` + password));
        this.router.navigate(['/']);
-     }, error =>{
-        console.log(error)
+     }, error => {
         this.openSnackbar();
      }
    );
@@ -43,42 +39,30 @@ export class LoginService {
   }
 
   logout(): void {
-    localStorage.removeItem('login');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('authorization');
+    this.router.navigateByUrl(`/`).then(() => window.location.reload());
   }
 
-  getUser(): UserModel {
-    return JSON.parse(localStorage.getItem('user'));
-  }
-
-  getLogin(): string {
-    console.log("user:")
-    console.log(localStorage.getItem('login'))
-    return JSON.parse(localStorage.getItem('login'));
-  }
-
-  getId(): string {
-    return this.getLogin() ? this.getLogin() : null;
-  }
-
-  getRole(): string {
-    return (JSON.parse(localStorage.getItem('user')) as UserModel).role;
+  getId(): number {
+    return JSON.parse(localStorage.getItem('userId'));
   }
 
   isUserLogged(): boolean {
-    return !!localStorage.getItem('login');
+    return !!localStorage.getItem('userId');
   }
 
   isAdmin(): boolean {
-    //sprawdzanie roli na sztywno
-    //TODO podpiac po request
     if (this.isUserLogged()) {
-      return (JSON.parse(localStorage.getItem('login'))) === 'admin';
+      const role = JSON.parse(localStorage.getItem('role'));
+      if (role) {
+        return role === 'ADMIN';
+      }
     }
     return false;
   }
 
-  //id to teraz login - TODO trzeba dodac unique do bazki na login
-  isEqualToId(login: string): boolean {
-    return this.getId() === login;
+  isEqualToId(id: number): boolean {
+    return this.getId() === id;
   }
 }

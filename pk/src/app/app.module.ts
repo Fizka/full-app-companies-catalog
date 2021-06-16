@@ -10,13 +10,14 @@ import {FooterComponent} from './page/footer/footer.component';
 import {MenuComponent} from './page/menu/menu.component';
 import {UserDetailsComponent} from './components/user-details/user-details.component';
 import {LoginComponent} from './components/logowanie/login.component';
-import {MatSnackBarModule} from '@angular/material';
+import {MatFormFieldModule, MatIconModule, MatInputModule, MatSnackBarModule} from '@angular/material';
 import {HeaderComponent} from './page/header/header.component';
 import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {FavoritePageComponent} from './components/dashboard/favorite-page.component';
 import {UserListComponent} from './components/users/user-list.component';
 import {AgGridModule} from 'ag-grid-angular';
 import {HttpClientModule} from '@angular/common/http';
+import {httpHeadersProvider} from './service/auth-basic.service';
 
 @NgModule({
   declarations: [
@@ -41,9 +42,11 @@ import {HttpClientModule} from '@angular/common/http';
     NoopAnimationsModule,
     AgGridModule,
     FormsModule,
-    HttpClientModule
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
-  providers: [HttpClientModule],
+  providers: [HttpClientModule, httpHeadersProvider],
   bootstrap: [AppComponent],
   entryComponents: [FavoritePageComponent]
 })

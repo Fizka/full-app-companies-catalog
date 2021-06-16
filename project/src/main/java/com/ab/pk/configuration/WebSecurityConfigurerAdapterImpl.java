@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -53,13 +54,15 @@ public class WebSecurityConfigurerAdapterImpl extends WebSecurityConfigurerAdapt
     protected void configure(HttpSecurity http) throws Exception {
 
         http    .authorizeRequests()
-                .antMatchers("/loginError")
+                .antMatchers(HttpMethod.GET, "/page/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/user").permitAll()
+                .antMatchers("/loginError", "/pages", "/user")
                 .permitAll()
-                .antMatchers("/login", "/loginError", "/rola/**", "/pages",
+                .antMatchers("/login", "/loginError", "/rola/**",
                         "/user/login/**", "user/**")
                 .hasAnyRole("USER", "ADMIN")
                 .antMatchers(
-                        "/users", "/user", "user/**",
+                        "/users", "user/**",
                         "/page/**", "/page")
                 .hasAnyRole("ADMIN")
                 .anyRequest().authenticated()

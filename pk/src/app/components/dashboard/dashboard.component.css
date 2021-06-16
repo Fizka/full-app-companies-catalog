@@ -13,6 +13,19 @@
   border-color: transparent;
 }
 
-.form-group {
-  margin-bottom: 0px;
+.example {
+  background: white !important;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-transform: none;
+  padding: 0 5px;
+  width: 130%;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 10px !important;
+}
+
+::ng-deep .mat-form-field-underline {
+  display: none;
 }

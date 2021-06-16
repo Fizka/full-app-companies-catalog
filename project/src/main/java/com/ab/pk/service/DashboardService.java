@@ -1,6 +1,8 @@
 package com.ab.pk.service;
 
+import com.ab.pk.model.AppUser;
 import com.ab.pk.model.CatalogPage;
+import com.ab.pk.model.ContextPage;
 import com.ab.pk.repository.CatalogPageRepository;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class DashboardService {
     }
 
     public List<CatalogPage> getPages() {
+        System.out.println("dwa!");
         return Lists.newArrayList(repository.findAll());
     }
 
@@ -29,7 +32,12 @@ public class DashboardService {
         return repository.findById(idBook);
     }
 
-    public CatalogPage savePage(CatalogPage catalogPage) {
+    public CatalogPage savePage(ContextPage contextPage, AppUser appUser) {
+        CatalogPage catalogPage = new CatalogPage();
+        catalogPage.setTitle(contextPage.getTitle());
+        catalogPage.setCompanyName(contextPage.getCompanyName());
+        catalogPage.setDescription(contextPage.getDescription());
+        catalogPage.setOwner(appUser);
         return repository.save(catalogPage);
     }
 

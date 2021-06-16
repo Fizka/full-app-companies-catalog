@@ -10,7 +10,7 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/pages">Dashboard</a>
       </li>
-      <li *ngIf="isAdmin" class="nav-item">
+      <li *ngIf="isAdmin()" class="nav-item">
         <a class="nav-link" routerLink="/users">Users</a>
       </li>
     </ul>

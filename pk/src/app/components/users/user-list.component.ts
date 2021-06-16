@@ -62,9 +62,9 @@ export class UserListComponent implements OnInit {
 
   getDetails(): void {
     const selectedRows = this.gridApi.getSelectedRows();
-    const id = selectedRows[0].id;
+    const id = selectedRows[0].idAppUser;
     const username = selectedRows[0].username;
-    this.router.navigate([`/user/add${username}`], {state: {userId: id}});
+    this.router.navigate([`/user/profile/${username}`], {state: {userId: id}});
   }
 
 }

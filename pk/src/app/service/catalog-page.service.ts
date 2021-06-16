@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AuthBasicService} from './auth-basic.service';
 
@@ -14,33 +14,27 @@ export class CatalogPageService {
               private authBasic: AuthBasicService) {
   }
 
-  getCustomer(id: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/page/${id}`,
-      {headers: this.authBasic.createAuthorizationHeader( null, null)});
+  getPage(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/page/${id}`);
   }
 
-  createCustomer(customer: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/page`, customer,
-      {headers: this.authBasic.createAuthorizationHeader( null, null)});
+  createPage(customer: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/page`, customer);
   }
 
-  updateCustomer(id: number, value: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/page/${id}`, value,
-      {headers: this.authBasic.createAuthorizationHeader( null, null)});
+  updatePage(id: number, value: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/page/${id}`, value);
   }
 
-  deleteCustomer(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/page/${id}`,
-      {headers: this.authBasic.createAuthorizationHeader( null, null)});
+  deletePage(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/page/${id}`);
   }
 
-  getCustomersList(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/pages`,
-      {headers: this.authBasic.createAuthorizationHeader( null, null)});
+  getPagesList(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/pages`);
   }
 
-  deleteAllCustomers(): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/pages`,
-      {headers: this.authBasic.createAuthorizationHeader( null, null)});
+  deleteAllPages(): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/pages`);
   }
 }

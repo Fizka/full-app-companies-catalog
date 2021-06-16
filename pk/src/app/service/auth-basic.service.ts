@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
-import {LoginService} from './login.service';
-import {UserModel} from '../model/user.model';
-import {HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Observable} from "rxjs";
+import {HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,45 +10,41 @@ export class AuthBasicService implements HttpInterceptor {
   constructor() {
   }
 
-  createAuthorizationHeader(password, login) {
-    //TODO podpiac po prawdziwe dane
+  createAuthorizationHeader(password?, login?) {
     let headers = new HttpHeaders();
-    if (!password || !login) {
-      console.log('Lack of auth!')
-      const user: UserModel = this.getUser();
-      //password = user.password;
-      //login = user.login;
+    let auth: string;
+    auth = (password && login) ? `Basic ` + btoa(login + `:` + password) : this.getAuthorization();
+    if (auth !== null) {
+      headers = headers.set(`Authorization`, auth);
     }
-    password = 'admin';
-    login = 'admin';
-    console.log(password + login)
-    let auth = 'Authorization: ' + 'Basic ' + btoa(login + ':' + password);
-    headers = headers.set(`Authorization`, `Basic ` +
-      btoa(login + `:` + password));
-    headers = headers.set(`Content-Type`, `application/json`);
-    console.log(headers.keys());
-    console.log('Authorization: Basic YWRtaW46YWRtaW4=')
-    console.log(auth)
     return headers;
   }
 
-  getUser(): UserModel {
-    return JSON.parse(localStorage.getItem('login'));
+  getAuthorization(): string {
+    return localStorage.getItem('authorization');
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // add authorization header with basic auth credentials if available
-    const currentUser = this.getUser();
-    console.log(currentUser)
-    //TODO default here
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Basic YWRtaW46YWRtaW4=`
-      }
-    });
+    if (this.getAuthorization()) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: this.getAuthorization(),
+          'Content-Type': `application/json`
+        }
+      });
+    } else {
+      req = req.clone({
+        setHeaders: {
+          'Content-Type': `application/json`
+        }
+      });
+    }
 
-    console.log(req)
     return next.handle(req);
   }
 
 }
+
+export const httpHeadersProvider = [
+  { provide: HTTP_INTERCEPTORS, useClass: AuthBasicService, multi: true }
+];

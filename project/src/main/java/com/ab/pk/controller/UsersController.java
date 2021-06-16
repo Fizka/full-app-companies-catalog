@@ -1,6 +1,6 @@
 package com.ab.pk.controller;
 
-import com.ab.pk.model.AppUser;
+import com.ab.pk.enums.UserStatus;
 import com.ab.pk.model.Credentials;
 import com.ab.pk.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,26 +30,27 @@ public class UsersController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/rola/{login}")
-    public ResponseEntity getRole(@PathVariable String login) {
+    @GetMapping(value = "/role/{id}")
+    public ResponseEntity<String> getRole(@PathVariable Long id) {
         try {
-            log.info("Request GET role check, Params: " + login);
-            AppUser appUser = userService.getAppUserByLogin(login);
+            log.info("Request GET role check, Params: " + id);
+            Credentials appUser = userService.getAppUserById(id);
             return ResponseEntity.ok(appUser.getRole());
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping(value = "/login")
-    public ResponseEntity login() {
+    @GetMapping(value = "/login/{login}")
+    public ResponseEntity<Credentials> login(@PathVariable String login) {
         try {
             log.info("Request GET - login");
-            return new ResponseEntity(HttpStatus.OK);
+            Credentials credentials = userService.getCredentialsByLogin(login);
+            return new ResponseEntity<>(credentials, HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -60,7 +61,7 @@ public class UsersController {
             return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -82,7 +83,7 @@ public class UsersController {
             return new ResponseEntity<>(userService.getAppUserById(id), HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -93,7 +94,7 @@ public class UsersController {
             return new ResponseEntity<>(userService.getCredentialsByLogin(login), HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -102,21 +103,43 @@ public class UsersController {
         try {
             log.info("Request DELETED user, with params: " + id);
             userService.deleteUser(id);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping(value = "user/{id}")
-    public ResponseEntity putUser(@PathVariable Long id, @RequestBody Credentials appUser) {
+    public ResponseEntity<Credentials> putUser(@PathVariable Long id, @RequestBody Credentials appUser) {
         try {
             log.info("Request UPDATE user, with params: " + id);
-            return new ResponseEntity(userService.putUser(id, appUser), HttpStatus.OK);
+            return new ResponseEntity<>(userService.putUser(id, appUser), HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping(value = "user/favourites/{id}")
+    public ResponseEntity<Credentials> changeFavourites(@PathVariable Long id, @RequestBody String pageId) {
+        try {
+            log.info("Request UPDATE favourites, with params: " + id);
+            return new ResponseEntity<>(userService.toggleFavourite(id, pageId), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PutMapping(value = "user/block/{id}")
+    public ResponseEntity<Credentials> changeStatus(@PathVariable Long id) {
+        try {
+            log.info("Request UPDATE status, with params: " + id);
+            System.out.println(id);
+            return new ResponseEntity<>(userService.changeStatus(id), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

@@ -7,15 +7,12 @@
   <div class="collapse navbar-collapse" id="navbarColor01">
     <ul class="navbar-nav ml-auto">
       <li *ngIf="viewDetails && isAdmin" class="nav-item active">
-        <a class="nav-link" (click)="edit()" >Edit Page
-        </a>
+        <a class="nav-link" (click)="edit()">Edit Page</a>
       </li>
       <li *ngIf="viewDetails && isAdmin" class="nav-item">
-        <a class="nav-link" (click)="delete()" >Delete Page</a>
+        <a class="nav-link" (click)="delete()">Delete Page</a>
       </li>
-
     </ul>
-
   </div>
 </nav>
 <br/>
@@ -38,9 +35,15 @@
       </div>
     </div>
     <div class="form-group row">
+      <label for="description" class="col-sm-2 col-form-label">Company name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="company-name" formControlName="companyName" required>
+      </div>
+    </div>
+    <div class="form-group row">
       <label for="owner" class="col-sm-2 col-form-label">Owner</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="owner" formControlName="owner" required>
+        <input type="text" class="form-control" id="owner" [value]="pageOwner" required disabled>
       </div>
     </div>
     <div class="form-group row">
@@ -52,18 +55,10 @@
     <div class="form-group row">
       <label for="creation-date" class="col-sm-2 col-form-label">Creation Date</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="creation-date" formControlName="creation-date" required>
+        <input type="text" class="form-control" id="creation-date" formControlName="creationDate" required>
       </div>
     </div>
-    <div class="form-group row">
-      <label for="pelneTekstyLokalnie" class="col-sm-2 col-form-label">Pełne teksty lokalnie</label>
-      <div class="col-sm-10">
-        <select class="form-control" formControlName="pelneTekstyLokalnie" id="pelneTekstyLokalnie" required>
-          <option value="true">True</option>
-          <option value="false">False</option>
-        </select>
-      </div>
-    </div>
+
     <button type="submit" class="btn btn-primary" *ngIf="!viewDetails">{{buttonContent}}</button>
   </form>
 </div>

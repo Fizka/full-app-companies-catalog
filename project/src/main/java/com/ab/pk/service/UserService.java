@@ -1,6 +1,7 @@
 package com.ab.pk.service;
 
 import com.ab.pk.enums.Role;
+import com.ab.pk.enums.UserStatus;
 import com.ab.pk.helpers.UserHelper;
 import com.ab.pk.model.AppUser;
 import com.ab.pk.model.ContextUser;
@@ -8,6 +9,7 @@ import com.ab.pk.model.Credentials;
 import com.ab.pk.repository.AppUserRepository;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,12 +44,12 @@ public class UserService {
         });
     }
 
-    //TODO check
     public Credentials getAppUserById(Long id) {
         return mapAppUserToCredentials(repository.findById(id).get());
     }
 
     public Credentials getCredentialsByLogin(String login) {
+        System.out.println("looking for user");
         return mapAppUserToCredentials(repository.findAppUserByLogin(login));
     }
 
@@ -73,18 +75,23 @@ public class UserService {
     public Credentials putUser(Long id, Credentials appUser) {
         Optional<AppUser> _appUser = repository.findById(id);
         if (_appUser.isPresent()) {
+            System.out.println(appUser);
             _appUser.get().setFirstname(appUser.getFirstname());
-            _appUser.get().setUsername(appUser.getUsername());
+            _appUser.get().setUsername(appUser.getUsername() != null ? appUser.getUsername() : _appUser.get().getUsername());
             _appUser.get().setLastname(appUser.getLastname());
             _appUser.get().setLogin(appUser.getLogin());
             log.info(appUser.getRole());
-            _appUser.get().setRole(appUser.getRole());
+            _appUser.get().setRole(!appUser.getRole().isBlank() ? appUser.getRole() : _appUser.get().getRole());
             _appUser.get().setPassword(appUser.getPassword());
             _appUser.get().setStatus(appUser.getStatus());
             if (appUser.getFavorite() != null) {
-                _appUser.get().setFavorite(appUser.getFavorite()
-                        .stream().map(String::valueOf)
-                        .collect(Collectors.joining(",")));
+                if(appUser.getFavorite().size() != 0) {
+                    _appUser.get().setFavorite(appUser.getFavorite()
+                            .stream().map(String::valueOf)
+                            .collect(Collectors.joining(",")));
+                }
+            } else {
+                _appUser.get().setFavorite(null);
             }
             AppUser appUser_ = repository.save(_appUser.get());
             return mapAppUserToCredentials(appUser_);
@@ -92,10 +99,39 @@ public class UserService {
         return null;
     }
 
+    public Credentials toggleFavourite(Long userId, String id) {
+        Integer pageId = Integer.parseInt(id);
+        Credentials credentials = getAppUserById(userId);
+        int index = credentials.getFavorite().indexOf(pageId);
+        System.out.println(credentials.getFavorite());
+        System.out.println(index);
+        if (index == -1) {
+            credentials.getFavorite().add(pageId);
+        } else {
+            credentials.getFavorite().remove(pageId);
+        }
+        System.out.println(credentials.getFavorite());
+        return putUser(userId, credentials);
+    }
+
+    public Credentials changeStatus(Long userId) {
+        System.out.println(userId);
+        Credentials credentials = getAppUserById(userId);
+        System.out.println(credentials);
+        if (credentials.getStatus().equals(UserStatus.ACTIVE)) {
+            credentials.setStatus(UserStatus.BLOCKED);
+        } else {
+            credentials.setStatus(UserStatus.ACTIVE);
+        }
+        return putUser(userId, credentials);
+    }
+
     public Credentials mapAppUserToCredentials(AppUser appUser) {
         Credentials credentials = new Credentials();
         if (appUser.getFavorite() != null) {
             credentials.setFavorite(stringToIntegerList(appUser.getFavorite()));
+        } else {
+            credentials.setFavorite(new ArrayList<>());
         }
         credentials.setIdAppUser(appUser.getIdAppUser());
         credentials.setFirstname(appUser.getFirstname());
@@ -110,11 +146,6 @@ public class UserService {
 
     public AppUser mapCredentialsToAppUser(Credentials appUser) {
         AppUser credentials = new AppUser();
-        if (appUser.getFavorite() != null) {
-            credentials.setFavorite(appUser.getFavorite()
-                    .stream().map(String::valueOf)
-                    .collect(Collectors.joining(",")));
-        }
         credentials.setIdAppUser(appUser.getIdAppUser());
         credentials.setFirstname(appUser.getFirstname());
         credentials.setLogin(appUser.getLogin());
@@ -125,7 +156,6 @@ public class UserService {
         credentials.setPassword(appUser.getPassword());
         return credentials;
     }
-
 
     public List<Integer> stringToIntegerList(String numbers) {
         return Arrays.stream(numbers.split(",")).map(user ->{

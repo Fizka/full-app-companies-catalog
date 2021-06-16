@@ -5,32 +5,35 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarColor01">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <mat-form-field class="example">
+          <mat-label>Search...</mat-label>
+          <span matPrefix>&nbsp;</span>
+          <input type="text" matInput (keyup)="searchCatalogPages()" [(ngModel)]="searchText" autocomplete="off">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </li>
+    </ul>
     <ul class="navbar-nav ml-auto">
-      <li *ngIf="isAdmin()" class="nav-item active">
-        <a class="nav-link" routerLink="/czasopismo/dodaj" (click)="addNewCatalogPage()">Save
-        </a>
+      <li *ngIf="isAdmin()" class="nav-item">
+        <a class="nav-link" routerLink="/page/add">Add page</a>
       </li>
       <li *ngIf="isAdmin()" class="nav-item">
-        <a class="nav-link" routerLink="/uzytkownik/dodaj">Save</a>
+        <a class="nav-link" routerLink="/user/add">Add user</a>
       </li>
-
     </ul>
-
   </div>
 </nav>
-<div class="form-group">
-  <input type="text" class="form-control" id="searchInput" (keyup)="searchCatalogPages()" required
-         [(ngModel)]="searchText"
-         aria-describedby="searchInput"
-         placeholder="">
-</div>
 <ag-grid-angular
   style="width: 100%; height: 700px;"
   class="ag-theme-alpine-dark"
   [rowData]="rowData"
-  [columnDefs]="columnDefs"
+  [columnDefs]="prepareColumns"
   [defaultColDef]="defaultColDef"
   [rowHeight]="200"
   [autoSizePadding]="true"
+  rowSelection="single"
+  (selectionChanged)="getDetails()"
   (gridReady)="onGridReady($event)">
 </ag-grid-angular>

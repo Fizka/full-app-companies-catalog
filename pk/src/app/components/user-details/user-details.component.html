@@ -9,8 +9,14 @@
         <a class="nav-link" (click)="editProfile()">Edit Profile
         </a>
       </li>
+      <li *ngIf="viewDetails && isEditModeOn && !isBlocked && isAdmin" class="nav-item">
+        <a class="nav-link" (click)="blockProfile()">Block customer</a>
+      </li>
+      <li *ngIf="viewDetails && isEditModeOn && isBlocked && isAdmin" class="nav-item">
+        <a class="nav-link" (click)="blockProfile()">Unblock customer</a>
+      </li>
       <li *ngIf="viewDetails && isEditModeOn" class="nav-item">
-        <a class="nav-link" r (click)="deleteProfile()"> Delete Profile</a>
+        <a class="nav-link" (click)="deleteProfile()">Delete Profile</a>
       </li>
     </ul>
   </div>
@@ -55,12 +61,24 @@
         <input type="text" class="form-control" id="firstname" formControlName="firstname" required>
       </div>
     </div>
-    <div class="form-group row" *ngIf="isAdmin">
-      <label for="permission" class="col-sm-2 col-form-label">{{translation[3][versionOfTranslation]}}</label>
+    <div class="form-group row">
+      <label for="firstname" class="col-sm-2 col-form-label">{{translation[3][versionOfTranslation]}}</label>
       <div class="col-sm-10">
-        <select class="form-control" formControlName="permission" id="permission" required>
-          <option value="1">User</option>
-          <option value="2">Admin</option>
+        <input type="text" class="form-control" id="lastname" formControlName="lastname" required>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="firstname" class="col-sm-2 col-form-label">{{translation[3][versionOfTranslation]}}</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="status" formControlName="status" required>
+      </div>
+    </div>
+    <div class="form-group row" *ngIf="isAdmin">
+      <label for="permission" class="col-sm-2 col-form-label">{{translation[4][versionOfTranslation]}}</label>
+      <div class="col-sm-10">
+        <select class="form-control" formControlName="role" id="permission" required>
+          <option value="USER">User</option>
+          <option value="ADMIN">Admin</option>
         </select>
       </div>
     </div>

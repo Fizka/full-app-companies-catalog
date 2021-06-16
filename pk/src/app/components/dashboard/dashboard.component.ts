@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {FavoritePageComponent} from './favorite-page.component';
 import {LoginService} from '../../service/login.service';
 import {CatalogPageService} from '../../service/catalog-page.service';
-import {PageCatalogModel} from "../../model/page-catalog.model";
+import {PageCatalogModel} from '../../model/page-catalog.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +24,13 @@ export class DashboardComponent implements OnInit {
   };
 
   columnDefs = [
+    {headerName: 'Title', field: 'title', sortable: true, filter: true},
+    {headerName: 'Description', field: 'description', sortable: true, filter: true, resizable: false, width: 350},
+    {headerName: 'Owner', field: 'owner', sortable: true, filter: true},
+    {headerName: 'Status', field: 'status', sortable: true, filter: true},
+    {headerName: 'Creation date', field: 'creationDate', sortable: true, filter: true}
+  ];
+  columnDefsUser = [
     {
       headerName: '', width: 105, cellRendererFramework: FavoritePageComponent,
       sortable: false, filter: false, singleClickEdit: false, editable: false, suppressSizeToFit: true
@@ -51,30 +58,26 @@ export class DashboardComponent implements OnInit {
   }
 
   loadData(): void {
-    this.catalogPageService.getCustomersList().subscribe(data => {
-      data.forEach(data => this.rowData = this.mapToCatalogPage(data))
-      console.log(this.rowData)
-      console.log("loading...")
-      console.log(data);
+    this.catalogPageService.getPagesList().subscribe(data => {
+      data.forEach(data1 => this.rowData = this.mapToCatalogPage(data1));
     }, error => console.log(error));
   }
 
   mapToCatalogPage(data: any) {
-    let dat2: PageCatalogModel[] = [];
-    data.forEach(val=>{
-      console.log(val)
-      dat2.push(new PageCatalogModel(val.idCatalogPage, val.title, val.description, val.companyName,  val.status, val.creationDate))
-    })
-    console.log(dat2)
-    return dat2
+    const pagesList: PageCatalogModel[] = [];
+    data.forEach(val => {
+      val.owner = this.pageOwner(val.owner);
+      pagesList.push(
+        new PageCatalogModel(val.idCatalogPage, val.title, val.description, val.companyName, val.owner,  val.status, val.creationDate));
+    });
+    return pagesList;
   }
 
-  goToTemplateUser(): void {
-    this.router.navigate([`/user/profile/username1`], {state: {userId: 1}});
-  }
-
-  addNewCatalogPage(): void {
-    this.router.navigateByUrl('/page/add');
+  get prepareColumns() {
+    if (!!this.loginService.getId()) {
+      return this.columnDefsUser;
+    }
+    return this.columnDefs;
   }
 
   searchCatalogPages(): void {
@@ -86,5 +89,15 @@ export class DashboardComponent implements OnInit {
 
   isAdmin(): boolean {
     return this.loginService.isAdmin();
+  }
+
+  getDetails(): void {
+    const selectedRow = this.gridApi.getSelectedRows()[0];
+    const id = selectedRow.idCatalogPage;
+    this.router.navigate([`/page/${id}`]);
+  }
+
+  pageOwner(owner: any) {
+    return owner.firstname + ' ' + owner.lastname;
   }
 }

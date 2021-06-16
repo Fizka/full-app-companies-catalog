@@ -35,20 +35,27 @@ export class UserDetailsComponent implements OnInit {
 
   ngOnInit() {
     let id: number;
-    console.log(this.viewMode)
-    if (this.viewMode === 'details' || this.viewMode === 'edit') {
-      id = history.state.uzytkownikId;
-
-    } else if (this.viewMode === 'profile') {
-      let bodyOfUser: UserModel;
-      console.log(this.loginService.getLogin())
-        this.appUserService.getUserByLogin(this.loginService.getLogin())
-        .subscribe(data => {
+    let bodyOfUser: UserModel;
+    console.log(this.viewMode);
+    if (this.viewMode === 'profile') {
+      id = this.loginService.getId();
+      this.appUserService.getCustomer(id).subscribe(data => {
+        bodyOfUser = data;
+        console.log(data);
+        this.versionOfTranslation = 1;
+        this.helper.setUserValues(bodyOfUser, this.userForm);
+      });
+    } else if (this.viewMode === 'details' || this.viewMode === 'edit') {
+      id = history.state.userId;
+      if (id !== undefined) {
+        this.editMode = true;
+        this.appUserService.getCustomer(id).subscribe(data => {
           bodyOfUser = data;
-          console.log(data)
-          id = bodyOfUser.id;
-          this.versionOfTranslation = 1;
+          console.log(data);
+          this.helper.setUserValues(bodyOfUser, this.userForm);
+          this.username = this.userForm.get('username').value;
         });
+      }
     }
     this.userForm = this.helper.generateFormForUser(this.viewDetails);
     if (this.viewSignUpMode) {
@@ -56,33 +63,23 @@ export class UserDetailsComponent implements OnInit {
       this.confirmPassword.valueChanges
         .subscribe(() => this.userForm.updateValueAndValidity());
     }
-    console.log(id)
-    if (id !== undefined) {
-      this.editMode = true;
-      let bodyOfUser: UserModel;
-      console.log("login: ")
-      console.log(this.loginService.getUser().login)
-      this.appUserService.getUserByLogin(this.loginService.getUser().login)
-        .subscribe(data => {
-        bodyOfUser = data;
-        console.log(data)
-      });
-      this.helper.setUserValues(bodyOfUser, this.userForm);
-      this.username = this.userForm.get('username').value;
-    }
   }
 
   onSubmit(): void {
     if (this.userForm.valid) {
       if (this.editMode) {
-        this.appUserService.updateCustomer(this.helper.getUserModel(this.userForm).id,
+        this.appUserService.updateCustomer(this.helper.getUserModel(this.userForm).idAppUser,
           this.helper.getUserModel(this.userForm))
-          .subscribe(data => console.log(data));
-        this.goToMode();
+          .subscribe(data => {
+            console.log(data);
+            this.goToMode(data);
+          });
       } else {
         this.appUserService.createCustomer(this.helper.getUserModel(this.userForm))
-          .subscribe(data => console.log(data));
-        this.goToMode();
+          .subscribe(data => {
+            console.log(data);
+            this.goToMode(data);
+          });
       }
     } else {
       this.openSnackbar();
@@ -94,7 +91,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   get isEditModeOn(): boolean {
-    return this.loginService.isEqualToId(this.userForm.get('login').value) ||
+    return this.loginService.isEqualToId(this.userForm.get('id').value) ||
       this.loginService.isAdmin();
   }
 
@@ -122,33 +119,40 @@ export class UserDetailsComponent implements OnInit {
     return `SIGN UP`;
   }
 
+  get isBlocked(): boolean {
+    return this.userForm.get('status').value === 'BLOCKED';
+  }
+
   get isAdmin(): boolean {
     return this.loginService.isAdmin();
   }
 
   editProfile(): void {
-    console.log("Try edit")
     const username: string = this.userForm.get('username').value;
-    const id: string = this.userForm.get('id').value;
+    const id = this.userForm.get('id').value;
     this.router.navigate([`/user/edit/${username}`], {state: {userId: id}});
+  }
+
+  blockProfile(): void {
+    const id = this.userForm.get('id').value;
+    this.appUserService.changeCustomerStatus(id).subscribe(data => this.userForm.get('status').setValue(data.status));
   }
 
   deleteProfile(): void {
     this.appUserService.deleteCustomer(this.userForm.get('id').value)
-      .subscribe(data => console.log(data));
-    if (this.isAdmin) {
-      // powinien przekierować na listę userów
-      this.router.navigate(['users']);
-    } else {
-      this.loginService.logout();
-      this.router.navigate(['/']);
-    }
+      .subscribe(data => {
+        if (this.isAdmin) {
+          this.router.navigate(['/users']);
+        } else {
+          this.loginService.logout();
+        }
+      });
   }
 
-  private goToMode(): void {
+  private goToMode(data): void {
     if (this.isAdmin) {
-      const username = this.userForm.get('username').value;
-      const id = this.userForm.get('id').value;
+      const username = data.username;
+      const id = data.idAppUser;
       this.router.navigate([`/user/profile/${username}`], {state: {userId: id}});
     } else {
       if (this.editMode) {

@@ -1,5 +1,5 @@
 export class UserModel {
-  id: number;
+  idAppUser: number;
   login: string;
   password: string;
   lastname: string;
