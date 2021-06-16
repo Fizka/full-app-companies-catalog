@@ -45,7 +45,6 @@ export class PageDetailsComponent implements OnInit {
       });
     } else {
       this.appUserService.getCustomer(this.loginService.getId()).subscribe(data => {
-        console.log(data);
         this.owner = data.firstname + ' ' + data.lastname;
       });
     }
@@ -62,7 +61,6 @@ export class PageDetailsComponent implements OnInit {
       } else {
         this.catalogPageService.createPage(this.helper.getModelNewCatalog(this.catalogPageForm, this.loginService.getId()))
           .subscribe(data => {
-            console.log(data);
             this.navigate(data.idCatalogPage);
           });
       }
@@ -77,14 +75,14 @@ export class PageDetailsComponent implements OnInit {
 
   edit(): void {
     const id: string = this.catalogPageForm.get('idCatalogPage').value;
-    console.log(this.catalogPageForm);
     this.router.navigate([`/page/edit/${id}`]);
   }
 
   delete(): void {
     this.catalogPageService.deletePage(this.catalogPageForm.get('idCatalogPage').value)
-      .subscribe(data => console.log(data));
-    this.router.navigate([`/`]);
+      .subscribe(data => {
+        this.router.navigate([`/`]);
+      });
   }
 
   get viewDetails(): boolean {

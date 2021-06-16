@@ -9,10 +9,10 @@
         <a class="nav-link" (click)="editProfile()">Edit Profile
         </a>
       </li>
-      <li *ngIf="viewDetails && isEditModeOn && !isBlocked && isAdmin" class="nav-item">
+      <li *ngIf="viewDetails && isEditModeOn && !isBlocked && isAdmin" class="nav-item" id="block-user">
         <a class="nav-link" (click)="blockProfile()">Block customer</a>
       </li>
-      <li *ngIf="viewDetails && isEditModeOn && isBlocked && isAdmin" class="nav-item">
+      <li *ngIf="viewDetails && isEditModeOn && isBlocked && isAdmin" class="nav-item" id="unblock-user">
         <a class="nav-link" (click)="blockProfile()">Unblock customer</a>
       </li>
       <li *ngIf="viewDetails && isEditModeOn" class="nav-item">
@@ -82,7 +82,7 @@
         </select>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary" *ngIf="!viewDetails">{{buttonContent}}</button>
+    <button type="submit" class="btn btn-primary" *ngIf="!viewDetails" id="details-btn">{{buttonContent}}</button>
   </form>
 </div>
 

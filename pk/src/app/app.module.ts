@@ -18,6 +18,7 @@ import {UserListComponent} from './components/users/user-list.component';
 import {AgGridModule} from 'ag-grid-angular';
 import {HttpClientModule} from '@angular/common/http';
 import {httpHeadersProvider} from './service/auth-basic.service';
+import {httpErrorInterceptorProvider} from './service/errors-interceptor.spec';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,7 @@ import {httpHeadersProvider} from './service/auth-basic.service';
     MatFormFieldModule,
     MatInputModule,
   ],
-  providers: [HttpClientModule, httpHeadersProvider],
+  providers: [HttpClientModule, httpHeadersProvider, httpErrorInterceptorProvider],
   bootstrap: [AppComponent],
   entryComponents: [FavoritePageComponent]
 })

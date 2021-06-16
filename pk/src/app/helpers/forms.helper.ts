@@ -51,8 +51,6 @@ export class FormsHelper {
 
   getUserModel(userForm: FormGroup): UserModel {
     const user = new UserModel();
-    console.log(userForm);
-    console.log(!!userForm.get('id').value);
     user.idAppUser = !!userForm.get('id').value ? userForm.get('id').value : null;
     user.login = userForm.get('login').value;
     user.password = userForm.get('password').value;
@@ -66,7 +64,6 @@ export class FormsHelper {
   }
 
   setUserValues(details: UserModel, userForm: FormGroup): FormGroup {
-    console.log(details);
     userForm.get('id').setValue(details.idAppUser);
     userForm.get('login').setValue(details.login);
     userForm.get('password').setValue(details.password);

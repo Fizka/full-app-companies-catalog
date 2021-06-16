@@ -36,12 +36,11 @@ export class UserDetailsComponent implements OnInit {
   ngOnInit() {
     let id: number;
     let bodyOfUser: UserModel;
-    console.log(this.viewMode);
+    this.userForm = this.helper.generateFormForUser(this.viewDetails);
     if (this.viewMode === 'profile') {
       id = this.loginService.getId();
       this.appUserService.getCustomer(id).subscribe(data => {
         bodyOfUser = data;
-        console.log(data);
         this.versionOfTranslation = 1;
         this.helper.setUserValues(bodyOfUser, this.userForm);
       });
@@ -51,13 +50,11 @@ export class UserDetailsComponent implements OnInit {
         this.editMode = true;
         this.appUserService.getCustomer(id).subscribe(data => {
           bodyOfUser = data;
-          console.log(data);
           this.helper.setUserValues(bodyOfUser, this.userForm);
           this.username = this.userForm.get('username').value;
         });
       }
     }
-    this.userForm = this.helper.generateFormForUser(this.viewDetails);
     if (this.viewSignUpMode) {
       this.userForm.setValidators(passwordValidation(this.confirmPassword));
       this.confirmPassword.valueChanges
@@ -71,13 +68,11 @@ export class UserDetailsComponent implements OnInit {
         this.appUserService.updateCustomer(this.helper.getUserModel(this.userForm).idAppUser,
           this.helper.getUserModel(this.userForm))
           .subscribe(data => {
-            console.log(data);
             this.goToMode(data);
           });
       } else {
         this.appUserService.createCustomer(this.helper.getUserModel(this.userForm))
           .subscribe(data => {
-            console.log(data);
             this.goToMode(data);
           });
       }
@@ -140,7 +135,7 @@ export class UserDetailsComponent implements OnInit {
 
   deleteProfile(): void {
     this.appUserService.deleteCustomer(this.userForm.get('id').value)
-      .subscribe(data => {
+      .subscribe(() => {
         if (this.isAdmin) {
           this.router.navigate(['/users']);
         } else {

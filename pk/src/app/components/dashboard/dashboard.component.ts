@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
     {headerName: 'Status', field: 'status', sortable: true, filter: true},
     {headerName: 'Creation date', field: 'creationDate', sortable: true, filter: true}
   ];
-  rowData = [];
+  rowData = [] as PageCatalogModel[];
 
   constructor(private router: Router,
               private loginService: LoginService,

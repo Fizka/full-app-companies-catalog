@@ -44,8 +44,7 @@ export class UserListComponent implements OnInit {
 
   loadData(): void {
     this.userService.getCustomersList().subscribe(data => {
-      this.rowData = data
-      console.log(data)
+      this.rowData = data;
     });
   }
 

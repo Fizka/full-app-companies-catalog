@@ -1,6 +1,5 @@
 package com.ab.pk.controller;
 
-import com.ab.pk.enums.UserStatus;
 import com.ab.pk.model.Credentials;
 import com.ab.pk.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -131,6 +130,7 @@ public class UsersController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @PutMapping(value = "user/block/{id}")
     public ResponseEntity<Credentials> changeStatus(@PathVariable Long id) {
         try {

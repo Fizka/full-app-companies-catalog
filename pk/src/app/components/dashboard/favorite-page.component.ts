@@ -4,7 +4,6 @@ import {ICellRendererParams} from 'ag-grid-community';
 import {PageCatalogModel} from '../../model/page-catalog.model';
 import {UserModel} from '../../model/user.model';
 import {LoginService} from '../../service/login.service';
-import {CatalogPageService} from '../../service/catalog-page.service';
 import {AppUserService} from '../../service/app-user.service';
 import {map} from 'rxjs/operators';
 
@@ -22,7 +21,6 @@ export class FavoritePageComponent implements AgRendererComponent {
   rowData: UserModel;
 
   constructor(private loginService: LoginService,
-              private catalogPageService: CatalogPageService,
               private userService: AppUserService) {
   }
 
@@ -50,7 +48,7 @@ export class FavoritePageComponent implements AgRendererComponent {
 
   setFavourite(params: ICellRendererParams): void {
     if (!this.rowData) {
-      this.favorite = true;
+      this.favorite = false;
     } else {
       this.favorite = this.isEmpty(this.getFavoriteForUser(params.data));
     }
@@ -61,11 +59,9 @@ export class FavoritePageComponent implements AgRendererComponent {
   }
 
   addToFavorite(data: PageCatalogModel) {
-    console.log(this.rowData);
     if (this.rowData) {
       this.favorite = !this.favorite;
       const index = this.rowData.favorite.findIndex(row => row === data.idCatalogPage);
-      console.log(this.favorite);
       this.favorite === false ? this.rowData.favorite.push(data.idCatalogPage) : this.rowData.favorite.splice(index, 1);
       this.userService.updateFavouritesCustomer(data.idCatalogPage).subscribe();
     }
