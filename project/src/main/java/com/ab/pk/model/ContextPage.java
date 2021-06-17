@@ -1,7 +1,11 @@
 package com.ab.pk.model;
 
-import com.ab.pk.enums.UserStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -12,8 +16,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class ContextPage implements Serializable {
-	private String title;
-	private String companyName;
-	private Long idAppUser;
-	private String description;
+    private String title;
+    private String companyName;
+    private Long idAppUser;
+    private String description;
 }

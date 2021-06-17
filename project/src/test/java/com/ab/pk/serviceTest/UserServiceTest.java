@@ -65,9 +65,10 @@ public class UserServiceTest {
         assertEquals(newSavedCustomerTest.getLogin(), "NEW LOGIN");
         assertEquals(newSavedCustomerTest.getPassword(), "NEW PASSWORD");
         assertThrows(Exception.class, () -> {
-            if(!newSavedCustomerTest.getLogin().equals("LOGIN")){
+            if (!newSavedCustomerTest.getLogin().equals("LOGIN")) {
                 throw new ImcompatibleParametersException();
-            };
+            }
+            ;
         });
     }
 

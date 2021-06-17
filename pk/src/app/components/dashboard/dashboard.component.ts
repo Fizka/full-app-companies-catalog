@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit {
     {headerName: 'Status', field: 'status', sortable: true, filter: true},
     {headerName: 'Creation date', field: 'creationDate', sortable: true, filter: true}
   ];
+
   columnDefsUser = [
     {
       headerName: '', width: 105, cellRendererFramework: FavoritePageComponent,
@@ -68,7 +69,7 @@ export class DashboardComponent implements OnInit {
     data.forEach(val => {
       val.owner = this.pageOwner(val.owner);
       pagesList.push(
-        new PageCatalogModel(val.idCatalogPage, val.title, val.description, val.companyName, val.owner,  val.status, val.creationDate));
+        new PageCatalogModel(val.idCatalogPage, val.title, val.description, val.companyName, val.owner, val.status, val.creationDate));
     });
     return pagesList;
   }

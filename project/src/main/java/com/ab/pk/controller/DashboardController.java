@@ -31,7 +31,7 @@ import java.util.Optional;
 public class DashboardController {
 
     private final DashboardService dashboardService;
-    private final UserService userService;;
+    private final UserService userService;
 
     @Autowired
     public DashboardController(DashboardService dashboardService, UserService userService) {
@@ -46,7 +46,7 @@ public class DashboardController {
             log.info("Request GET for page, with param: " + idCatalogPage);
             Optional<CatalogPage> catalogPage = dashboardService.getPageById(idCatalogPage);
             log.info((catalogPage.get().toString()));
-            if(!catalogPage.isPresent()){
+            if (!catalogPage.isPresent()) {
                 throw new CatalogPageNotFoundException(idCatalogPage);
             }
             return new ResponseEntity<>(catalogPage.get(), HttpStatus.OK);
@@ -94,18 +94,18 @@ public class DashboardController {
             dashboardService.deletePage(idCatalogPage);
             return new ResponseEntity<>(HttpStatus.OK);
 
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             log.error(exception.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping(value = "/page/{id}")
-    public ResponseEntity <CatalogPage> putCatalogPage(@PathVariable Long id, @RequestBody CatalogPage catalogPage ){
-        try{
+    public ResponseEntity<CatalogPage> putCatalogPage(@PathVariable Long id, @RequestBody CatalogPage catalogPage) {
+        try {
             log.info("Request Catalog Page UPDATE with id: " + id);
             return new ResponseEntity<>(dashboardService.putCatalogPage(id, catalogPage), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

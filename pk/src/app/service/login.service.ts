@@ -20,15 +20,15 @@ export class LoginService {
     const login = data.get('login').value;
     const password = data.get('password').value;
     this.appUserService.getCustomerByLogin(login, password).subscribe(
-     userData => {
-       localStorage.setItem('userId', JSON.stringify(userData.idAppUser));
-       localStorage.setItem('role', JSON.stringify(userData.role));
-       localStorage.setItem('authorization', `Basic ` + btoa(login + `:` + password));
-       this.router.navigate(['/']);
-     }, error => {
+      userData => {
+        localStorage.setItem('userId', JSON.stringify(userData.idAppUser));
+        localStorage.setItem('role', JSON.stringify(userData.role));
+        localStorage.setItem('authorization', `Basic ` + btoa(login + `:` + password));
+        this.router.navigate(['/']);
+      }, error => {
         this.openSnackbar();
-     }
-   );
+      }
+    );
   }
 
   openSnackbar() {

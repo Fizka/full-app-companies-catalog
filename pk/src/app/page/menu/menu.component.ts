@@ -11,8 +11,7 @@ import {AppUserService} from "../../service/app-user.service";
 export class MenuComponent implements OnInit {
 
   constructor(private router: Router,
-              private loginService: LoginService,
-              private appUserService: AppUserService) {
+              private loginService: LoginService) {
   }
 
   ngOnInit() {

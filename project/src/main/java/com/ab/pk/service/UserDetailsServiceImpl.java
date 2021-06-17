@@ -25,8 +25,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        log.info(login); 
-        if("".equals(login))
+        log.info(login);
+        if ("".equals(login))
             throw new NullPointerException("Username is null!");
         Optional<AppUser> user = Optional.of(userService.findAppUserByLogin(login));
 

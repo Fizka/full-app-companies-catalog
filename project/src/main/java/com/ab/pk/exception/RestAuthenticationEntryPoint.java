@@ -17,7 +17,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                         AuthenticationException e) throws  IOException {
+                         AuthenticationException e) throws IOException {
         Gson gson = new Gson();
         log.error(httpServletRequest.getAuthType());
         log.error(String.valueOf(httpServletRequest.getHeaderNames()));

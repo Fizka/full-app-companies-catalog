@@ -40,7 +40,7 @@ public class CreateMockData {
         }
         for (int i = 0; i < 10; i++) {
             catalogPageRepository.save(new CatalogPage(faker.company().catchPhrase(),
-                    faker.company().name(), catalogPages.get(faker.number().numberBetween(0,1))
+                    faker.company().name(), catalogPages.get(faker.number().numberBetween(0, 1))
                     , faker.company().profession()
             ));
         }

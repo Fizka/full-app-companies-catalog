@@ -1,5 +1,12 @@
 import {Injectable} from '@angular/core';
-import {HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpEvent,
+  HttpHandler,
+  HttpHeaders,
+  HttpInterceptor,
+  HttpRequest
+} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
 @Injectable({
@@ -46,5 +53,5 @@ export class AuthBasicService implements HttpInterceptor {
 }
 
 export const httpHeadersProvider = [
-  { provide: HTTP_INTERCEPTORS, useClass: AuthBasicService, multi: true }
+  {provide: HTTP_INTERCEPTORS, useClass: AuthBasicService, multi: true}
 ];

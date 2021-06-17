@@ -69,7 +69,7 @@ public class UsersController {
     public ResponseEntity<Credentials> createUser(@RequestBody Credentials appUser) {
         try {
             log.info("Request POST user, with params: " + appUser);
-            if(appUser.getRole() == null){
+            if (appUser.getRole() == null) {
                 appUser.setRole("USER");
             }
             appUser.setStatus(UserStatus.ACTIVE);

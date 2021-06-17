@@ -35,8 +35,8 @@ describe('FavoritePageComponent', () => {
         AppModule
       ],
       providers: [
-        { provide: AppUserService, useValue: appUserServiceSpy },
-        { provide: LoginService, useValue: loginServiceSpy },
+        {provide: AppUserService, useValue: appUserServiceSpy},
+        {provide: LoginService, useValue: loginServiceSpy},
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();

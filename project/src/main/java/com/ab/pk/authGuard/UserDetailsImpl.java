@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Slf4j
 public class UserDetailsImpl implements UserDetails {
 
@@ -27,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
         log.info(String.valueOf(this.authorities));
     }
 
-    private String getCollectRole(String role){
+    private String getCollectRole(String role) {
         return role.equals("ADMIN") ? RoleConstant.adminRole : RoleConstant.userRole;
     }
 

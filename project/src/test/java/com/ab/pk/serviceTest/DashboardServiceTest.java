@@ -61,9 +61,10 @@ public class DashboardServiceTest {
         catalogPage.setTitle("NEW TITLE");
         CatalogPage newCatalog = pageRepository.save(catalogPage);
         assertThrows(Exception.class, () -> {
-            if(!newCatalog.getDescription().equals("TEST TEST TEST TEST TEST")){
+            if (!newCatalog.getDescription().equals("TEST TEST TEST TEST TEST")) {
                 throw new ImcompatibleParametersException();
-            };
+            }
+            ;
         });
     }
 

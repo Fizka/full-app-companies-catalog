@@ -19,6 +19,7 @@ export class UserListComponent implements OnInit {
     resizable: true,
     wrapText: true
   };
+
   columnDefs = [
     {headerName: 'Login', field: 'login', sortable: true, filter: true},
     {headerName: 'Username', field: 'username', sortable: true, filter: true},

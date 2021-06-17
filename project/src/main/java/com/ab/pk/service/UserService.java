@@ -29,7 +29,6 @@ public class UserService {
     private List<ContextUser> contextUsers;
     private UserHelper userHelper;
 
-
     @Autowired
     public UserService(AppUserRepository repository, UserHelper userHelper) {
         contextUsers = new ArrayList<>();
@@ -86,7 +85,7 @@ public class UserService {
             _appUser.get().setPassword(appUser.getPassword());
             _appUser.get().setStatus(appUser.getStatus());
             if (appUser.getFavorite() != null) {
-                if(appUser.getFavorite().size() != 0) {
+                if (appUser.getFavorite().size() != 0) {
                     _appUser.get().setFavorite(appUser.getFavorite()
                             .stream().map(String::valueOf)
                             .collect(Collectors.joining(",")));
@@ -159,7 +158,7 @@ public class UserService {
     }
 
     public List<Integer> stringToIntegerList(String numbers) {
-        return Arrays.stream(numbers.split(",")).map(user ->{
+        return Arrays.stream(numbers.split(",")).map(user -> {
             log.info(user.toString());
             return Integer.parseInt(user);
         }).collect(Collectors.toList());

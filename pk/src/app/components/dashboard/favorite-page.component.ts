@@ -33,16 +33,16 @@ export class FavoritePageComponent implements AgRendererComponent {
     const userId = this.loginService.getId();
     let user;
     if (!!userId) {
-        this.userService.getCustomer(userId).pipe(map(data => {
-          if (!data.favorite) {
-            data.favourite = [];
-          }
-          return data;
-        })).subscribe(data => {
-          user = data;
-          this.rowData = user;
-          this.setFavourite(params);
-        }, error => console.log(error));
+      this.userService.getCustomer(userId).pipe(map(data => {
+        if (!data.favorite) {
+          data.favourite = [];
+        }
+        return data;
+      })).subscribe(data => {
+        user = data;
+        this.rowData = user;
+        this.setFavourite(params);
+      }, error => console.log(error));
     }
   }
 

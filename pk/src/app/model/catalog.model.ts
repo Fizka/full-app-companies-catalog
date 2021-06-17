@@ -1,4 +1,3 @@
-
 export class CatalogModel {
   title: string;
   description: string;

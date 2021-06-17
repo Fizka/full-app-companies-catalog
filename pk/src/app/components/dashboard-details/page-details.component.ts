@@ -56,7 +56,7 @@ export class PageDetailsComponent implements OnInit {
         this.catalogPageService
           .updatePage(this.helper.getModelCatalogPage(this.catalogPageForm).idCatalogPage,
             this.helper.getModelCatalogPage(this.catalogPageForm)).subscribe(data => {
-            this.navigate(data.idCatalogPage);
+          this.navigate(data.idCatalogPage);
         });
       } else {
         this.catalogPageService.createPage(this.helper.getModelNewCatalog(this.catalogPageForm, this.loginService.getId()))

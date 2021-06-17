@@ -1,4 +1,3 @@
-
 export class PageCatalogModel {
   idCatalogPage: number;
   title: string;

@@ -48,12 +48,13 @@ public class WebSecurityConfigurerAdapterImpl extends WebSecurityConfigurerAdapt
     @Autowired
     void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsServiceImpl)
-                .passwordEncoder(NoOpPasswordEncoder.getInstance());;
+                .passwordEncoder(NoOpPasswordEncoder.getInstance());
+        ;
     }
 
     protected void configure(HttpSecurity http) throws Exception {
 
-        http    .authorizeRequests()
+        http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/page/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/user").permitAll()
                 .antMatchers("/loginError", "/pages", "/user")
@@ -63,7 +64,7 @@ public class WebSecurityConfigurerAdapterImpl extends WebSecurityConfigurerAdapt
                 .hasAnyRole("USER", "ADMIN")
                 .antMatchers(
                         "/users", "user/**",
-                          "/page/**", "/page")
+                        "/page/**", "/page")
                 .hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
