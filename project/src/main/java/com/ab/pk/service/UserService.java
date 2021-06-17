@@ -2,6 +2,7 @@ package com.ab.pk.service;
 
 import com.ab.pk.enums.Role;
 import com.ab.pk.enums.UserStatus;
+import com.ab.pk.exception.AppUserNotFoundException;
 import com.ab.pk.helpers.UserHelper;
 import com.ab.pk.model.AppUser;
 import com.ab.pk.model.ContextUser;
@@ -9,7 +10,6 @@ import com.ab.pk.model.Credentials;
 import com.ab.pk.repository.AppUserRepository;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -73,7 +73,8 @@ public class UserService {
     }
 
     public Credentials putUser(Long id, Credentials appUser) {
-        Optional<AppUser> _appUser = repository.findById(id);
+        Optional<AppUser> _appUser = Optional.ofNullable(repository.findById(id)
+                .orElseThrow(() -> new AppUserNotFoundException(id)));
         if (_appUser.isPresent()) {
             System.out.println(appUser);
             _appUser.get().setFirstname(appUser.getFirstname());

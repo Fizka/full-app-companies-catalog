@@ -73,12 +73,20 @@ export class UserDetailsComponent implements OnInit {
       } else {
         this.appUserService.createCustomer(this.helper.getUserModel(this.userForm))
           .subscribe(data => {
+            this.openSnackbarForCorrectResponse("Your account was created.")
             this.goToMode(data);
+
           });
       }
     } else {
       this.openSnackbar();
     }
+  }
+
+  openSnackbarForCorrectResponse(message) {
+    this.snackBar.open(message, 'Close', {
+      duration: 10000
+    });
   }
 
   get viewDetails(): boolean {

@@ -18,7 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+public class UserRepositoryTest {
 
     @Mock
     private static AppUserRepository customerRepository;
@@ -36,14 +36,14 @@ public class UserServiceTest {
     }
 
     @Test
-    public void saveAppUser() {
+    public void save_AppUser_test() {
         when(customerRepository.save(any(AppUser.class))).then(returnsFirstArg());
         AppUser savedCustomerTest = customerRepository.save(appUser);
         assertNotNull(savedCustomerTest);
     }
 
     @Test
-    public void savedUserHaveDefaultValues() {
+    public void check_saved_user_default_values() {
         when(customerRepository.save(any(AppUser.class))).then(returnsFirstArg());
         AppUser savedCustomerTest = customerRepository.save(appUser);
         assertEquals(savedCustomerTest.getRole(), "USER");
@@ -51,7 +51,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void savedUserHaveNewValues() {
+    public void new_values_for_user_test() {
         when(customerRepository.save(any(AppUser.class))).then(returnsFirstArg());
         AppUser savedCustomerTest = customerRepository.save(appUser);
         assertEquals(savedCustomerTest.getLogin(), "LOGIN");
@@ -61,7 +61,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void savedUserHaveNullValues() {
+    public void check_if_user_not_null() {
         AppUser appUser_ = new AppUser();
         when(customerRepository.save(any(AppUser.class))).then(returnsFirstArg());
         AppUser savedCustomerTest = customerRepository.save(appUser_);

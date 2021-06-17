@@ -1,5 +1,6 @@
 package com.ab.pk.controller;
 
+import com.ab.pk.enums.UserStatus;
 import com.ab.pk.model.Credentials;
 import com.ab.pk.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +69,10 @@ public class UsersController {
     public ResponseEntity<Credentials> createUser(@RequestBody Credentials appUser) {
         try {
             log.info("Request POST user, with params: " + appUser);
+            if(appUser.getRole() == null){
+                appUser.setRole("USER");
+            }
+            appUser.setStatus(UserStatus.ACTIVE);
             return new ResponseEntity<>(userService.saveUser(appUser), HttpStatus.CREATED);
         } catch (Exception e) {
             log.error(e.getMessage());

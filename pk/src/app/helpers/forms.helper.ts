@@ -109,6 +109,10 @@ export class FormsHelper {
       [
         'Choose Permission:',
         'User Permissions:',
+      ],
+      [
+        'Enter Status:',
+        'User Status:',
       ]
     ];
   }

@@ -63,7 +63,7 @@ public class WebSecurityConfigurerAdapterImpl extends WebSecurityConfigurerAdapt
                 .hasAnyRole("USER", "ADMIN")
                 .antMatchers(
                         "/users", "user/**",
-                        "/page/**", "/page")
+                          "/page/**", "/page")
                 .hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

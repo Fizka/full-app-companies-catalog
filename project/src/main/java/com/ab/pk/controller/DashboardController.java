@@ -1,5 +1,6 @@
 package com.ab.pk.controller;
 
+import com.ab.pk.exception.CatalogPageNotFoundException;
 import com.ab.pk.model.AppUser;
 import com.ab.pk.model.CatalogPage;
 import com.ab.pk.model.ContextPage;
@@ -45,6 +46,9 @@ public class DashboardController {
             log.info("Request GET for page, with param: " + idCatalogPage);
             Optional<CatalogPage> catalogPage = dashboardService.getPageById(idCatalogPage);
             log.info((catalogPage.get().toString()));
+            if(!catalogPage.isPresent()){
+                throw new CatalogPageNotFoundException(idCatalogPage);
+            }
             return new ResponseEntity<>(catalogPage.get(), HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -89,7 +93,8 @@ public class DashboardController {
             log.info("Request DELETE Catalog Page with id: " + idCatalogPage);
             dashboardService.deletePage(idCatalogPage);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception exception) {
+
+        }catch (Exception exception) {
             log.error(exception.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

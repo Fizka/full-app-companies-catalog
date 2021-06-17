@@ -1,5 +1,6 @@
 package com.ab.pk.service;
 
+import com.ab.pk.exception.CatalogPageNotFoundException;
 import com.ab.pk.model.AppUser;
 import com.ab.pk.model.CatalogPage;
 import com.ab.pk.model.ContextPage;
@@ -47,7 +48,8 @@ public class DashboardService {
 
     public CatalogPage putCatalogPage(Long id, CatalogPage catalogPage) {
         try {
-            Optional<CatalogPage> catalogPage_ = repository.findById(id);
+            Optional<CatalogPage> catalogPage_ = Optional.ofNullable(repository.findById(id)
+                    .orElseThrow(() -> new CatalogPageNotFoundException(id)));
             catalogPage_.get().setDescription(catalogPage.getDescription());
             catalogPage_.get().setStatus(catalogPage.getStatus());
             catalogPage_.get().setTitle(catalogPage.getTitle());
